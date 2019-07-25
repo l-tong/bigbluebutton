@@ -20,13 +20,17 @@ trait BreakoutHdlrHelpers extends SystemConfiguration {
       (redirectParams, redirectToHtml5Params) = BreakoutRoomsUtil.joinParams(user.name, userId + "-" + roomSequence, true,
         externalMeetingId, liveMeeting.props.password.moderatorPass)
       // We generate a first url with redirect -> true
+      // DCS added replace()
       redirectBaseString = BreakoutRoomsUtil.createBaseString(redirectParams)
-      redirectJoinURL = BreakoutRoomsUtil.createJoinURL(bbbWebAPI, apiCall, redirectBaseString,
+      val redirectJoinURLTemp = BreakoutRoomsUtil.createJoinURL(bbbWebAPI, apiCall, redirectBaseString,
         BreakoutRoomsUtil.calculateChecksum(apiCall, redirectBaseString, bbbWebSharedSecret))
+      redirectJoinURL = redirectJoinURLTemp.replace("http", "https")
       // We generate a second url with redirect -> true and joinViaHtml5 -> true
+      // DCS added replace()
       redirectToHtml5BaseString = BreakoutRoomsUtil.createBaseString(redirectToHtml5Params)
-      redirectToHtml5JoinURL = BreakoutRoomsUtil.createJoinURL(bbbWebAPI, apiCall, redirectToHtml5BaseString,
+      val redirectToHtml5JoinURLTemp = BreakoutRoomsUtil.createJoinURL(bbbWebAPI, apiCall, redirectToHtml5BaseString,
         BreakoutRoomsUtil.calculateChecksum(apiCall, redirectToHtml5BaseString, bbbWebSharedSecret))
+      redirectToHtml5JoinURL = redirectToHtml5JoinURLTemp.replace("http", "https")
     } yield {
       sendJoinURLMsg(liveMeeting.props.meetingProp.intId, breakoutId, externalMeetingId,
         userId, redirectJoinURL, redirectToHtml5JoinURL)
